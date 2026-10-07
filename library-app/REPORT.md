@@ -47,7 +47,7 @@ The assignment demonstrates protected navigation, role authorization, refresh-to
 
 ## GitHub
 
-Repository: https://github.com/<username>/<repository>
+Repository: https://github.com/authorabhikhyath-blip/pbl-fsd-chromedevtools
 
 ## Evidence plan and figure captions
 
