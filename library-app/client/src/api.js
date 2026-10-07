@@ -1,0 +1,6 @@
+import axios from 'axios';
+export const api=axios.create({baseURL:import.meta.env.VITE_API_URL||'http://localhost:4000',withCredentials:true});
+let readToken=()=>null,handleRefresh=async()=>{throw new Error('Auth not ready')},handleLogout=()=>{};let refreshing=null,waiters=[];
+export function configureAuth({getToken,refresh,logout}){readToken=getToken;handleRefresh=refresh;handleLogout=logout;}
+api.interceptors.request.use(config=>{const token=readToken();if(token)config.headers.Authorization=`Bearer ${token}`;return config;});
+api.interceptors.response.use(r=>r,async error=>{const req=error.config;if(error.response?.status!==401||!req||req._retried||req.url?.includes('/v1/auth/'))return Promise.reject(error);req._retried=true;if(!refreshing){refreshing=handleRefresh().then(token=>{waiters.forEach(w=>w.resolve(token));waiters=[];return token;}).catch(e=>{waiters.forEach(w=>w.reject(e));waiters=[];handleLogout();throw e;}).finally(()=>{refreshing=null;});}else return new Promise((resolve,reject)=>waiters.push({resolve,reject})).then(token=>{req.headers.Authorization=`Bearer ${token}`;return api(req);});try{const token=await refreshing;req.headers.Authorization=`Bearer ${token}`;return api(req);}catch(e){return Promise.reject(e);}});

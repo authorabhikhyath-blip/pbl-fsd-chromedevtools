@@ -1,0 +1,23 @@
+  [console] INSECURE DEMO access token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoib…
+BEFORE localStorage.demoAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjo…
+admin menu: Books | Members | Manage books
+  refreshToken cookie httpOnly=true sameSite=Strict path=/v1/auth | document.cookie="" | localStorage keys=0
+librarian menu: Books | Loans
+  refreshToken cookie httpOnly=true sameSite=Strict path=/v1/auth | document.cookie="" | localStorage keys=0
+member menu: Books | My loans
+  refreshToken cookie httpOnly=true sameSite=Strict path=/v1/auth | document.cookie="" | localStorage keys=0
+member -> /members shows 403 page at http://localhost:5173/403
+countdown at login: Session debug · member · access token in memory · Refresh in 61s · Refresh token: HttpOnly cookie
+countdown 8s later: Refresh in 53s
+silent refresh fired: 17:06:49 POST /v1/auth/refresh -> 200
+countdown after refresh: Refresh in 59s
+refreshToken cookie deleted; waiting for next refresh…
+refresh attempts: 17:07:29 POST /v1/auth/refresh -> 401
+redirected to http://localhost:5173/login
+
+All refresh calls:
+17:06:08 POST /v1/auth/refresh -> 401
+17:06:09 POST /v1/auth/refresh -> 200
+17:06:49 POST /v1/auth/refresh -> 200
+17:07:29 POST /v1/auth/refresh -> 401
+17:07:29 POST /v1/auth/refresh -> 401
